@@ -1,3 +1,58 @@
+# name: Distill & Revalidate DApp Data
+
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - "data/apps/**/meta.json"
+#       - "scripts/distill.ts"
+#       - "scripts/check-links.ts"
+#       - "lib/cloudinary.ts"
+#       - "lib/schema.ts"
+#       - "lib/logger.ts"
+#   workflow_dispatch:
+
+# permissions:
+#   contents: write
+
+# jobs:
+#   distill_and_commit:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+#         with:
+#           token: ${{ secrets.GITHUB_TOKEN }}
+
+#       - name: Setup pnpm
+#         uses: pnpm/action-setup@v3
+#         with:
+#           version: 8
+#           run_install: true
+
+#       - name: Load Environment Variables
+#         run: |
+#           echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> $GITHUB_ENV
+#           echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> $GITHUB_ENV
+#           echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> $GITHUB_ENV
+#           echo "HMAC_SECRET=${{ secrets.HMAC_SECRET }}" >> $GITHUB_ENV
+
+#       - name: Run DApp Data Distillation
+#         run: pnpm run distill
+
+#       - name: Run DApp Data Link Accessibility Check
+#         run: pnpm run check-links
+
+#       - name: Auto-commit generated files
+#         uses: stefanzweifel/git-auto-commit-action@v5
+#         with:
+#           commit_message: "chore(data): auto-generated DApp data files"
+#           file_pattern: |
+#             data/apps.min.json
+#             data/slugs.json
+#             data/apps/**/meta.json
+
 name: Distill & Revalidate DApp Data
 
 on:
@@ -29,7 +84,23 @@ jobs:
         uses: pnpm/action-setup@v3
         with:
           version: 8
-          run_install: true
+
+      # 🚀 CACHING ADDED HERE
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Load Environment Variables
         run: |
