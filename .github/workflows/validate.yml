@@ -1,0 +1,31 @@
+name: Validate DApp Data
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'data/apps/**/meta.json'
+      - 'scripts/validate.ts'
+      - 'scripts/check-links.ts' # Include check-links in paths to trigger on changes
+      - 'lib/schema.ts'
+      - 'lib/logger.ts' # Include logger in paths to trigger on changes
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+          run_install: true
+          
+      - name: Run DApp Data Validation (Schema, Slugs, Relations)
+        run: pnpm run validate
+
+      - name: Run DApp Data Link Accessibility Check
+        run: pnpm run check-links

@@ -1,0 +1,8 @@
+# Dependencies
+node_modules/
+# Build artifacts
+dist/
+# pnpm lock file
+pnpm-lock.yaml
+# Local environment variables
+.env.local

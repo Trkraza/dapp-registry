@@ -1,0 +1,33 @@
+{
+  "slug": "dapp3",
+  "name": "DApp 3",
+  "logoUrl": "https://res.cloudinary.com/dksmzzvgs/image/upload/v1770619147/d5dxnqk5a6fpihvaf3g9.png",
+  "category": "Gaming",
+  "chains": [
+    "Solana"
+  ],
+  "tags": [
+    "Play-to-Earn"
+  ],
+  "pricing": "Paid",
+  "content": {
+    "short": "Short description for DApp 3",
+    "description": "Full description for DApp 3",
+    "meta": "SEO description for DApp 3",
+    "pageTitle": "DApp 3 | DApp Store"
+  },
+  "links": {
+    "website": "https://dapp3.com"
+  },
+  "relations": {
+    "alternatives": [
+      "non-existent-dapp"
+    ],
+    "related": [
+      "dapp1"
+    ]
+  },
+  "source": {
+    "fullyScraped": true
+  }
+}

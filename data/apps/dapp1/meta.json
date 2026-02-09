@@ -1,0 +1,29 @@
+{
+  "slug": "dapp1",
+  "name": "DApp 1",
+  "logoUrl": "https://res.cloudinary.com/dksmzzvgs/image/upload/v1770619145/hkbnsbcilxmezdmhjmdg.png",
+  "category": "DeFi",
+  "chains": [
+    "Ethereum"
+  ],
+  "tags": [
+    "DEX"
+  ],
+  "pricing": "Free",
+  "content": {
+    "short": "Short description for DApp 1",
+    "description": "Full description for DApp 1",
+    "meta": "SEO description for DApp 1",
+    "pageTitle": "DApp 1 | DApp Store"
+  },
+  "links": {
+    "website": "https://dapp1.com"
+  },
+  "relations": {
+    "alternatives": [],
+    "related": []
+  },
+  "source": {
+    "fullyScraped": true
+  }
+}
