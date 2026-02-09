@@ -7,7 +7,7 @@
   "tags": ["DEX", "AMM", "Swap", "Liquidity Pool", "Decentralized Exchange"],
   "pricing": "Free",
   "content": {
-    "short": "Trade cryptocurrencies directly from your wallet with the leading decentralized exchange.",
+    "short": "Trade uniswap cryptocurrencies directly from your wallet with the leading decentralized exchange.",
     "description": "Uniswap is a decentralized exchange (DEX) that allows users to swap ERC-20 tokens directly from their wallets without the need for intermediaries. It operates using an Automated Market Maker (AMM) model, where liquidity is provided by users in exchange for a portion of trading fees. Uniswap is a foundational protocol in the decentralized finance (DeFi) ecosystem, enabling permissionless and censorship-resistant trading.",
     "meta": "Trade ERC-20 tokens on Ethereum and other EVM-compatible chains. Provide liquidity and earn fees with Uniswap, the leading AMM DEX.",
     "pageTitle": "Uniswap - Decentralized Exchange (DEX)"
