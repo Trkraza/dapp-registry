@@ -114,6 +114,21 @@ import logger from "../lib/logger";
 import fetch, { Response } from "node-fetch";
 import { z } from "zod";
 
+const SOCIAL_MEDIA_REDIRECT_HEURISTICS = [
+  {
+    domain: "twitter.com",
+    genericPaths: ["/", "/home"],
+    isGenericRedirect: (originalUrlObj: URL, finalUrlObj: URL) => {
+      // If the original path had a segment (username) and the final URL path is just '/' or '/home',
+      // it's likely a non-existent profile.
+      return (
+        originalUrlObj.pathname !== "/" && originalUrlObj.pathname.length > 1 &&
+        (SOCIAL_MEDIA_REDIRECT_HEURISTICS[0].genericPaths.includes(finalUrlObj.pathname) || finalUrlObj.pathname.startsWith('/search'))
+      );
+    }
+  }
+];
+
 // Define the root directory for apps data
 const APPS_DIR = path.join(process.cwd(), "data", "apps");
 
@@ -167,6 +182,20 @@ async function checkLink(
     clearTimeout(timeoutId);
 
     if (response.ok) {
+      const originalUrlObj = new URL(url);
+      const finalUrlObj = new URL(response.url);
+
+      const heuristic = SOCIAL_MEDIA_REDIRECT_HEURISTICS.find(h => originalUrlObj.hostname.includes(h.domain));
+
+      if (heuristic && heuristic.isGenericRedirect(originalUrlObj, finalUrlObj)) {
+        return {
+          url,
+          status: "inaccessible",
+          statusCode: response.status,
+          error: `${heuristic.domain} link redirected to generic page, profile/content likely does not exist.`,
+        };
+      }
+
       return { url, status: "accessible", statusCode: response.status };
     } else {
       return {
