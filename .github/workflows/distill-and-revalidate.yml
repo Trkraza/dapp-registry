@@ -5,13 +5,16 @@ on:
     branches:
       - main
     paths:
-      - 'data/apps/**/meta.json' # Trigger when source meta files change
-      - 'scripts/distill.ts' # Trigger if distiller logic changes
-      - 'scripts/check-links.ts' # Trigger if link checker logic changes
-      - 'lib/cloudinary.ts' # Trigger if Cloudinary logic changes
-      - 'lib/schema.ts' # Trigger if schemas change
-      - 'lib/logger.ts' # Trigger if logger changes
-  workflow_dispatch: # Allows manual triggering
+      - "data/apps/**/meta.json"
+      - "scripts/distill.ts"
+      - "scripts/check-links.ts"
+      - "lib/cloudinary.ts"
+      - "lib/schema.ts"
+      - "lib/logger.ts"
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   distill_and_commit:
@@ -20,7 +23,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # Required for git-auto-commit-action to commit to main
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup pnpm
@@ -28,20 +30,13 @@ jobs:
         with:
           version: 8
           run_install: true
-          
+
       - name: Load Environment Variables
-        # This step will load the .env.local file into the environment
-        # In a real CI/CD setup, these would be secrets in GitHub Actions
         run: |
           echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> $GITHUB_ENV
           echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> $GITHUB_ENV
           echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> $GITHUB_ENV
           echo "HMAC_SECRET=${{ secrets.HMAC_SECRET }}" >> $GITHUB_ENV
-        env:
-          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
-          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
-          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
-          HMAC_SECRET: ${{ secrets.HMAC_SECRET }}
 
       - name: Run DApp Data Distillation
         run: pnpm run distill
@@ -53,8 +48,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore(data): auto-generated DApp data files"
-          # Only commit generated files
-          files: |
+          file_pattern: |
             data/apps.min.json
             data/slugs.json
             data/apps/**/meta.json
