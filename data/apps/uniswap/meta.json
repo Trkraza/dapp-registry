@@ -22,5 +22,8 @@
   "relations": {
     "alternatives": [],
     "related": []
+  },
+  "source": {
+    "fullyScraped": true
   }
 }
