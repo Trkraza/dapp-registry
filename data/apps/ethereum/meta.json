@@ -1,0 +1,24 @@
+{
+  "slug": "ethereum",
+  "name": "My Test DApp",
+  "logoUrl": "./ethereum.avif",
+  "category": "Utility",
+  "chains": ["Ethereum", "Polygon"],
+  "tags": ["testing", "example"],
+  "pricing": "Free",
+  "content": {
+    "short": "A short test description for my new dapp ethereum.",
+    "description": "This is a detailed description ethereum for my new test dapp. It's used to verify the validation.",
+    "meta": "SEO meta description for my new test dapp.",
+    "pageTitle": "My Test DApp ethereumdapp - Utility"
+  },
+  "links": {
+    "website": "https://www.google.com",
+    "github": "https://github.com",
+    "twitter": "https://twitter.com/ethereum"
+  },
+  "relations": {
+    "alternatives": [],
+    "related": []
+  }
+}
