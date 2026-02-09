@@ -14,6 +14,9 @@ dependencies:
   cloudinary:
     specifier: ^2.9.0
     version: 2.9.0
+  dapp-registry:
+    specifier: 'link:'
+    version: 'link:'
   dotenv:
     specifier: ^17.2.4
     version: 17.2.4
@@ -50,7 +53,7 @@ devDependencies:
     specifier: ^29.4.6
     version: 29.4.6(@babel/core@7.29.0)(jest@30.2.0)(typescript@5.9.3)
   tsx:
-    specifier: ^4.19.0
+    specifier: ^4.21.0
     version: 4.21.0
 
 packages:
