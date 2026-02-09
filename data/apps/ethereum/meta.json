@@ -1,5 +1,5 @@
 {
-  "slug": "my-test-dapp",
+  "slug": "ethereum",
   "name": "My Test DApp",
   "logoUrl": "./ethereum.jpg",
   "category": "Utility",
@@ -10,7 +10,7 @@
     "short": "A short test description for my new dapp.",
     "description": "This is a detailed description for my new test dapp. It's used to verify the validation.",
     "meta": "SEO meta description for my new test dapp.",
-    "pageTitle": "My Test DApp - Utility"
+    "pageTitle": "My Test DApp ethereumdapp - Utility"
   },
   "links": {
     "website": "https://www.google.com",

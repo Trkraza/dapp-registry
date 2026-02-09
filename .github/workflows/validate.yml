@@ -5,20 +5,18 @@ on:
     branches:
       - main
     paths:
-      - "data/apps/**" # Trigger on any changes within data/apps
+      - "data/apps/**"
       - "scripts/**"
       - "lib/**"
 
 jobs:
   validate:
     runs-on: ubuntu-latest
-    outputs:
-      changed_dapp_slugs: ${{ steps.get_changed_dapp_slugs.outputs.slugs }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Required for tj-actions/changed-files
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
@@ -30,34 +28,31 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v40
         with:
-          files: "data/apps/**/meta.json" # Focus on meta.json changes
+          files: "data/apps/**/meta.json"
 
       - name: Extract changed dapp slugs
         id: get_changed_dapp_slugs
         run: |
-          # Initialize an empty array
           SLUGS=()
-          # Loop through each changed meta.json file
-          for file in ${{ steps.changed-files.outputs.modified_files }}; do
-            # Extract the slug using bash parameter expansion
-            # Example: data/apps/dapp-slug/meta.json -> dapp-slug
+          for file in ${{ steps.changed-files.outputs.modified_files }} ${{ steps.changed-files.outputs.added_files }}; do
             slug=$(echo "$file" | sed -E 's|data/apps/([^/]+)/meta.json|\1|')
-            SLUGS+=("$slug")
-          done
-          for file in ${{ steps.changed-files.outputs.added_files }}; do
-            slug=$(echo "$file" | sed -E 's|data/apps/([^/]+)/meta.json|\1|')
-            SLUGS+=("$slug")
+            if [[ "$slug" != "$file" ]]; then
+              SLUGS+=("$slug")
+            fi
           done
 
-          # Get unique slugs as a space-separated string
-          UNIQUE_SLUGS=$(printf "%s\n" "${SLUGS[@]}" | sort -u | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
+          UNIQUE_SLUGS=$(printf "%s\n" "${SLUGS[@]}" | sort -u | tr '\n' ' ' | xargs)
           echo "Found changed slugs: $UNIQUE_SLUGS"
           echo "slugs=$UNIQUE_SLUGS" >> $GITHUB_OUTPUT
         shell: bash
 
-      - name: Run DApp Data Validation (Schema, Slugs, Relations)
+      - name: Run DApp Data Validation
         run: pnpm run validate
 
       - name: Run DApp Data Link Accessibility Check
-        if: ${{ steps.get_changed_dapp_slugs.outputs.slugs != '' }}
-        run: pnpm run check-links ${{ steps.get_changed_dapp_slugs.outputs.slugs }}
+        if: steps.get_changed_dapp_slugs.outputs.slugs != ''
+        run: |
+          SLUGS="${{ steps.get_changed_dapp_slugs.outputs.slugs }}"
+          if [ -n "$SLUGS" ]; then
+            pnpm run check-links $SLUGS
+          fi
