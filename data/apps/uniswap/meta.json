@@ -1,7 +1,7 @@
 {
   "slug": "uniswap",
   "name": "Uniswap",
-  "logoUrl": "./logo.jpg",
+  "logoUrl": "./uniswap.webp",
   "category": "DeFi",
   "chains": ["Ethereum", "Polygon", "Arbitrum", "Optimism", "BNB Chain"],
   "tags": ["DEX", "AMM", "Swap", "Liquidity Pool", "Decentralized Exchange"],
