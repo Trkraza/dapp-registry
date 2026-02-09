@@ -3,7 +3,7 @@ import { z } from "zod";
 export const metaJsonSchema = z.object({
   slug: z.string(), // Must match parent folder name
   name: z.string(),
-  logoUrl: z.string(), // Can be "./logo.png" or "https://..."
+  logoUrl: z.string().min(1, "Logo URL cannot be empty"), // Can be "./logo.png" or "https://..."
   category: z.string(), // e.g., "DeFi", "NFT"
   chains: z.array(z.string()),
   tags: z.array(z.string()),

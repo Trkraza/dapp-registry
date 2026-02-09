@@ -218,13 +218,20 @@ async function checkLink(
   }
 }
 
-export default async function checkLinksScript(appsDir: string = APPS_DIR) {
+export default async function checkLinksScript(appsDir: string = APPS_DIR, slugsToProcess?: string[]) {
   logger.info("Starting link accessibility check...");
   let hasBrokenLinks = false;
   const allLinksToCheck: { dappSlug: string; url: string; type: string }[] = [];
 
   try {
-    const slugs = await fs.readdir(appsDir);
+    let slugs: string[];
+    if (slugsToProcess && slugsToProcess.length > 0) {
+      logger.info(`Checking links for specific dapps: ${slugsToProcess.join(', ')}`);
+      slugs = slugsToProcess;
+    } else {
+      logger.info('Checking links for all dapps.');
+      slugs = await fs.readdir(appsDir);
+    }
 
     for (const slug of slugs) {
       const metaPath = path.join(appsDir, slug, "meta.json");
